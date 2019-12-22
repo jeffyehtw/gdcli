@@ -87,7 +87,5 @@ class Cli:
         )
         args = parser.parse_args(sys.argv[2:])
 
-        path = '/Users/cjyeh/Git/gdcli'
-
-        self._upload.sync(id=args.parent, path=path, title=args.file)
+        self._upload.sync(id=args.parent, path=os.getcwd(), title=args.file)
         self._upload.do(threads=4)
