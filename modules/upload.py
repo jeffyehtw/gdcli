@@ -11,7 +11,6 @@ class Upload:
         self.drive = Drive()
 
     def sync(self, **kwargs):
-        print(kwargs)
         _result = self.drive.search(id=kwargs['id'], title=kwargs['title'])
         path = os.path.join(kwargs['path'], kwargs['title'])
         if os.path.isfile(path):
@@ -32,8 +31,5 @@ class Upload:
                 self.sync(id=id, path=path, title=item)
 
     def do(self, **kwargs):
-        print('do')
-        for task in self.tasks:
-            print(task)
         with concurrent.futures.ThreadPoolExecutor(max_workers=kwargs['threads']) as executor:
             futures = executor.map(self.drive.upload, self.tasks)

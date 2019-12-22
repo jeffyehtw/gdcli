@@ -6,6 +6,8 @@ import os
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
+__log__ = '[{function:>10}] {message}'
+
 class Drive:
     def __init__(self):
         self.drive = None
@@ -38,6 +40,7 @@ class Drive:
             print(str(e))
 
     def search(self, **kwargs):
+        print(__log__.format(function='Search', message=kwargs['title']))
         try:
             return self.drive.ListFile({
                 'q': '"{id}" in parents and title = "{title}"'.format(
@@ -47,8 +50,10 @@ class Drive:
             }).GetList()
         except Exception as e:
             print(str(e))
+            return []
 
     def download(self, task):
+        print(__log__.format(function='Download', message=task['title']))
         try:
             file = self.drive.CreateFile({'id': task['id']})
             file.GetContentFile(task['path'])
@@ -56,6 +61,7 @@ class Drive:
             print(str(e))
 
     def upload(self, task):
+        print(__log__.format(function='Upload', message=task['title']))
         try:
             file = self.drive.CreateFile({
                 'title': task['title'],

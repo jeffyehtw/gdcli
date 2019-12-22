@@ -14,13 +14,9 @@ class Download:
         items = self.drive.ls(id=kwargs['id'])
         for item in items:
             path = os.path.join(kwargs['path'], item['title'])
-            print(item['title'])
             if item['mimeType'] == 'application/vnd.google-apps.folder':
-                try:
-                    if not os.path.exists(path):
-                        os.makedirs(path)
-                except:
-                    print(str(e))
+                if not os.path.exists(path):
+                    os.makedirs(path)
                 self.sync(
                     id=item['id'],
                     path=path
@@ -29,7 +25,8 @@ class Download:
                 if not os.path.exists(path):
                     self.tasks.append({
                         'id': item['id'],
-                        'path': path
+                        'path': path,
+                        'title': item['title']
                     })
 
     def do(self, **kwargs):

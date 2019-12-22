@@ -11,7 +11,7 @@ from modules.download import Download
 __version__ = '1.0'
 __description__ = 'A command line tool for Google Drive'
 __epilog__ = 'Report bugs to <yehcj.tw@gmail.com>'
-__path__ = os.path.dirname(os.path.abspath(__file__))
+__log__ = '[{function:>10}] {message}'
 
 class Cli:
     def __init__(self):
@@ -59,7 +59,7 @@ class Cli:
         args = parser.parse_args(sys.argv[2:])
 
         self._download.sync(id=args.id, path='.')
-        self._download.do(threads=4)
+        self._download.do(threads=args.threads)
 
     def upload(self):
         parser = argparse.ArgumentParser(description='')
@@ -88,4 +88,4 @@ class Cli:
         args = parser.parse_args(sys.argv[2:])
 
         self._upload.sync(id=args.parent, path=os.getcwd(), title=args.file)
-        self._upload.do(threads=4)
+        self._upload.do(threads=args.threads)
