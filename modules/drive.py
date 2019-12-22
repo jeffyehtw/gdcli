@@ -6,7 +6,7 @@ import os
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-__log__ = '[{function:>10}] {message}'
+__log__ = '{function:>10}: {message}'
 
 class Drive:
     def __init__(self):
@@ -40,7 +40,6 @@ class Drive:
             print(str(e))
 
     def search(self, **kwargs):
-        print(__log__.format(function='Search', message=kwargs['title']))
         try:
             return self.drive.ListFile({
                 'q': '"{id}" in parents and title = "{title}"'.format(

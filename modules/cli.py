@@ -11,7 +11,6 @@ from modules.download import Download
 __version__ = '1.0'
 __description__ = 'A command line tool for Google Drive'
 __epilog__ = 'Report bugs to <yehcj.tw@gmail.com>'
-__log__ = '[{function:>10}] {message}'
 
 class Cli:
     def __init__(self):
