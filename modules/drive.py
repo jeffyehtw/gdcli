@@ -42,7 +42,7 @@ class Drive:
     def search(self, **kwargs):
         try:
             return self.drive.ListFile({
-                'q': '"{id}" in parents and title = "{title}"'.format(
+                'q': '"{id}" in parents and title = "{title}" and trashed = false'.format(
                     id=kwargs['id'],
                     title=kwargs['title']
                 )
@@ -55,7 +55,7 @@ class Drive:
         print(__log__.format(function='Download', message=task['title']))
         try:
             file = self.drive.CreateFile({'id': task['id']})
-            file.GetContentFile(task['path'])
+            file.GetContentFile(os.path.join(task['path'], task['title']))
         except Exception as e:
             print(str(e))
 
@@ -83,5 +83,18 @@ class Drive:
             })
             folder.Upload()
             return folder['id']
+        except Exception as e:
+            print(str(e))
+
+    def get(self, **kwargs):
+        try:
+            file = self.drive.CreateFile({'id': kwargs['id']})
+            return file
+        except Exception as e:
+            print(str(e))
+
+    def isdir(self, **kwargs):
+        try:
+            return kwargs['item']['mimeType'] == 'application/vnd.google-apps.folder'
         except Exception as e:
             print(str(e))

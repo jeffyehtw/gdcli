@@ -44,6 +44,12 @@ class Cli:
             help=''
         )
         parser.add_argument(
+            '-p',
+            '--path',
+            default=os.getcwd(),
+            help=''
+        )
+        parser.add_argument(
             '-r',
             '--recursive',
             default=False,
@@ -57,7 +63,7 @@ class Cli:
         )
         args = parser.parse_args(sys.argv[2:])
 
-        self._download.sync(id=args.id, path='.')
+        self._download.sync(id=args.id, path=args.path)
         self._download.do(threads=args.threads)
 
     def upload(self):
@@ -69,7 +75,7 @@ class Cli:
         parser.add_argument(
             '-p',
             '--parent',
-            required=True,
+            default='root',
             help=''
         )
         parser.add_argument(
