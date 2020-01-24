@@ -50,15 +50,10 @@ class Cli:
             help=''
         )
         parser.add_argument(
-            '-r',
-            '--recursive',
-            default=False,
-            help=''
-        )
-        parser.add_argument(
             '-t',
             '--threads',
             default=4,
+            type=int,
             help=''
         )
         args = parser.parse_args(sys.argv[2:])
@@ -79,15 +74,10 @@ class Cli:
             help=''
         )
         parser.add_argument(
-            '-r',
-            '--recursive',
-            required=False,
-            help=''
-        )
-        parser.add_argument(
             '-t',
             '--threads',
             default=4,
+            type=int,
             help=''
         )
         args = parser.parse_args(sys.argv[2:])
