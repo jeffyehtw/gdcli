@@ -2,16 +2,18 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import os
+import logging
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-__log__ = '{function:>10}: {message}'
+__log__ = '{function:>8}: {message}'
 
 class Drive:
     def __init__(self):
         self.drive = None
         self.auth()
+        self.logger = logging.getLogger('gdcli.Drive')
 
     def auth(self):
         gauth = GoogleAuth()
@@ -52,7 +54,10 @@ class Drive:
             return []
 
     def download(self, task):
-        print(__log__.format(function='Download', message=task['title']))
+        self.logger.info(__log__.format(
+            function='download',
+            message=task['title'])
+        )
         try:
             file = self.drive.CreateFile({'id': task['id']})
             file.GetContentFile(os.path.join(task['path'], task['title']))
@@ -60,7 +65,10 @@ class Drive:
             print(str(e))
 
     def upload(self, task):
-        print(__log__.format(function='Upload', message=task['title']))
+        self.logger.info(__log__.format(
+            function='upload',
+            message=task['title'])
+        )
         try:
             file = self.drive.CreateFile({
                 'title': task['title'],

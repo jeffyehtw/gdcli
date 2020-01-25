@@ -3,10 +3,18 @@ from __future__ import print_function
 
 import os
 import sys
+import logging
 import argparse
 
 from modules.upload import Upload
 from modules.download import Download
+
+logger = logging.getLogger('gdcli')
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter(
+    fmt='| %(asctime)s | %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 __version__ = '1.0'
 __description__ = 'A command line tool for Google Drive'
@@ -56,7 +64,20 @@ class Cli:
             type=int,
             help=''
         )
+        parser.add_argument(
+            '-l',
+            '--log',
+            help=''
+        )
         args = parser.parse_args(sys.argv[2:])
+
+        if None == args.log:
+            handler = logging.StreamHandler()
+        else:
+            handler = logging.FileHandler(args.log)
+
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
 
         self._download.sync(id=args.id, path=args.path)
         self._download.do(threads=args.threads)
@@ -80,7 +101,20 @@ class Cli:
             type=int,
             help=''
         )
+        parser.add_argument(
+            '-l',
+            '--log',
+            help=''
+        )
         args = parser.parse_args(sys.argv[2:])
+
+        if None == args.log:
+            handler = logging.StreamHandler()
+        else:
+            handler = logging.FileHandler(args.log)
+
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
 
         self._upload.sync(id=args.parent, path=os.getcwd(), title=args.file)
         self._upload.do(threads=args.threads)

@@ -2,17 +2,24 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import os
+import logging
 import concurrent.futures
+
 from modules.drive import Drive
+
+__log__ = '{function:>8}: {message}'
 
 class Download:
     def __init__(self):
         self.tasks = []
         self.drive = Drive()
+        self.logger = logging.getLogger('gdcli.Download')
 
     def sync(self, **kwargs):
         item = self.drive.get(id=kwargs['id'])
         path = os.path.join(kwargs['path'], item['title'])
+
+        self.logger.info(__log__.format(function='sync', message=item['title']))
 
         if True == self.drive.isdir(item=item):
             if not os.path.exists(path):
@@ -40,5 +47,9 @@ class Download:
                 })
 
     def do(self, **kwargs):
+        self.logger.info(__log__.format(
+            function='sync',
+            message='%d files are found' % len(self.tasks))
+        )
         with concurrent.futures.ThreadPoolExecutor(max_workers=kwargs['threads']) as executor:
             futures = executor.map(self.drive.download, self.tasks)

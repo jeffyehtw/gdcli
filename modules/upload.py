@@ -2,17 +2,27 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import os
+import logging
 import concurrent.futures
+
 from modules.drive import Drive
+
+__log__ = '{function:>8}: {message}'
 
 class Upload:
     def __init__(self):
         self.tasks = []
         self.drive = Drive()
+        self.logger = logging.getLogger('gdcli.Upload')
 
     def sync(self, **kwargs):
         path = os.path.join(kwargs['path'], kwargs['title'])
         result = self.drive.search(id=kwargs['id'], title=kwargs['title'])
+
+        self.logger.info(__log__.format(
+            function='sync',
+            message=kwargs['title'])
+        )
 
         if True == os.path.isdir(path):
             if 0 == len(result):
@@ -43,5 +53,9 @@ class Upload:
                 })
 
     def do(self, **kwargs):
+        self.logger.info(__log__.format(
+            function='sync',
+            message='%d files are found' % len(self.tasks))
+        )
         with concurrent.futures.ThreadPoolExecutor(max_workers=kwargs['threads']) as executor:
             futures = executor.map(self.drive.upload, self.tasks)
